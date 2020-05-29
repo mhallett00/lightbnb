@@ -142,7 +142,6 @@ const getAllProperties = function(options, limit = 10) {
   LIMIT $${queryParams.length};
   `;
 
-  console.log(queryString);
   return pool.query(queryString, queryParams)
 
   .then (res => res.rows);
@@ -155,22 +154,13 @@ exports.getAllProperties = getAllProperties;
  * @param {{}} property An object containing all of the property details.
  * @return {Promise<{}>} A promise to the property.
  */
-const addProperty = function(property) {
-  console.log(property);  
+const addProperty = function(property) { 
   return pool.query(`
   INSERT INTO properties (
     owner_id, title, description, cover_photo_url, thumbnail_photo_url, cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, province, city, country, street, post_code) 
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
   RETURNING *;
   `, [property.owner_id, property.title, property.description, property.cover_photo_url, property.thumbnail_photo_url, property.cost_per_night, property.parking_spaces, property.number_of_bathrooms, property.number_of_bedrooms, property.province, property.city, property.country, property.street, property.post_code])
-  .then (res => {
-    console.log(res.rows)
-    return res.rows;
-  });
-
-  // const propertyId = Object.keys(properties).length + 1;
-  // property.id = propertyId;
-  // properties[propertyId] = property;
-  // return Promise.resolve(property);
+  .then (res => res.rows);
 }
 exports.addProperty = addProperty;
